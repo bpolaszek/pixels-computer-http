@@ -1,4 +1,11 @@
-const { createCanvas } = require("@napi-rs/canvas");
+const { createCanvas, GlobalFonts } = require("@napi-rs/canvas");
+
+function registerFont(path, options) {
+  GlobalFonts.registerFromPath(path, options.family);
+}
+
+registerFont("Arial.ttf", { family: "Arial" });
+registerFont("Roboto-Regular.ttf", { family: "Roboto" });
 
 function getTextWidthInPixels(text, fontFamily, fontSize) {
     const canvas = createCanvas(200, 50);
