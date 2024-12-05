@@ -10,7 +10,6 @@
   "dependencies": {
     "@napi-rs/canvas": "^0.1.65",
     "@netlify/functions": "^2.0.0",
-    "canvas": "^2.11.2",
     "express": "^4.18.2",
     "serverless-http": "^3.2.0"
   },
