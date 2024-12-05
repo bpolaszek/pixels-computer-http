@@ -1,4 +1,4 @@
-const { createCanvas, GlobalFonts } = require("@napi-rs/canvas");
+import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
 function registerFont(path, options) {
   GlobalFonts.registerFromPath(path, options.family);
@@ -7,11 +7,9 @@ function registerFont(path, options) {
 registerFont("Arial.ttf", { family: "Arial" });
 registerFont("Roboto-Regular.ttf", { family: "Roboto" });
 
-function getTextWidthInPixels(text, fontFamily, fontSize) {
+export function getTextWidthInPixels(text, fontFamily, fontSize) {
     const canvas = createCanvas(200, 50);
     const context = canvas.getContext("2d");
     context.font = `${fontSize}px ${fontFamily}`;
     return Math.round(context.measureText(text).width);
 }
-
-module.exports = { getTextWidthInPixels };
