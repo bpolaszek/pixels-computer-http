@@ -1,6 +1,6 @@
-import express from 'express';
-import serverless from 'serverless-http';
-import { getTextWidthInPixels } from '../../canvas.js';
+const express = require('express');
+const serverless = require('serverless-http');
+const { getTextWidthInPixels } = require('../../canvas.js');
 
 const app = express();
 app.use(express.json());
@@ -35,4 +35,4 @@ app.post('/.netlify/functions/compute-pixels', (req, res) => {
     }
 });
 
-export const handler = serverless(app);
+module.exports.handler = serverless(app);
