@@ -4,10 +4,19 @@ import { getTextWidthInPixels } from './canvas.js';
 const app = express();
 app.use(express.json());
 
+const ALLOWED_FONTS = ['Arial', 'Roboto'];
+
+const validateFont = (fontFamily) => {
+    if (!ALLOWED_FONTS.includes(fontFamily)) {
+        throw new Error(`Invalid font family. Only ${ALLOWED_FONTS.join(' and ')} are allowed.`);
+    }
+};
+
 const measureText = (text, fontFamily, fontSize) => {
     if (!text || !fontFamily || !fontSize) {
         throw new Error('Missing required parameters. Please provide text, fontFamily and fontSize');
     }
+    validateFont(fontFamily);
     return getTextWidthInPixels(text, fontFamily, parseInt(fontSize));
 };
 
