@@ -24,11 +24,20 @@ app.get('/compute-pixels', (req, res) => {
 });
 
 app.post('/compute-pixels', (req, res) => {
-    const { text, fontFamily, fontSize } = req.body;
-
     try {
-        const width = measureText(text, fontFamily, fontSize);
-        res.json({ text, fontFamily, fontSize, width });
+        if (Array.isArray(req.body)) {
+            // Traitement des requêtes multiples
+            const results = req.body.map(({ text, fontFamily, fontSize }) => {
+                const width = measureText(text, fontFamily, fontSize);
+                return { text, fontFamily, fontSize, width };
+            });
+            res.json(results);
+        } else {
+            // Traitement d'une requête simple
+            const { text, fontFamily, fontSize } = req.body;
+            const width = measureText(text, fontFamily, fontSize);
+            res.json({ text, fontFamily, fontSize, width });
+        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
