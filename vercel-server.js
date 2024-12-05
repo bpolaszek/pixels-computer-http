@@ -1,14 +1,42 @@
-const express = require("express");
+import express from 'express';
+import { getTextWidthInPixels } from './canvas.js';
 
 const app = express();
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Express on Vercel");
+const measureText = (text, fontFamily, sizeInPixels) => {
+  if (!text || !fontFamily || !sizeInPixels) {
+    throw new Error('Missing required parameters. Please provide text, fontFamily and sizeInPixels');
+  }
+  return getTextWidthInPixels(text, fontFamily, parseInt(sizeInPixels));
+};
+
+app.get('/measure', (req, res) => {
+  const { text, fontFamily, sizeInPixels } = req.query;
+
+  try {
+    const width = measureText(text, fontFamily, sizeInPixels);
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=87400');
+    res.json({ width });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
-app.listen(5000, () => {
-  console.log("Running on port 5000.");
+app.post('/measure', (req, res) => {
+  const { text, fontFamily, sizeInPixels } = req.body;
+
+  try {
+    const width = measureText(text, fontFamily, sizeInPixels);
+    res.json({ width });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
-// Export the Express API
-module.exports = app;
+const port = process.env.PORT || 8787;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
+export default app
