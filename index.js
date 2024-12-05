@@ -4,31 +4,31 @@ import { getTextWidthInPixels } from './canvas.js';
 const app = express();
 app.use(express.json());
 
-const measureText = (text, fontFamily, sizeInPixels) => {
-    if (!text || !fontFamily || !sizeInPixels) {
-        throw new Error('Missing required parameters. Please provide text, fontFamily and sizeInPixels');
+const measureText = (text, fontFamily, fontSize) => {
+    if (!text || !fontFamily || !fontSize) {
+        throw new Error('Missing required parameters. Please provide text, fontFamily and fontSize');
     }
-    return getTextWidthInPixels(text, fontFamily, parseInt(sizeInPixels));
+    return getTextWidthInPixels(text, fontFamily, parseInt(fontSize));
 };
 
-app.get('/measure', (req, res) => {
-    const { text, fontFamily, sizeInPixels } = req.query;
-    
+app.get('/compute-pixels', (req, res) => {
+    const { text, fontFamily, fontSize } = req.query;
+
     try {
-        const width = measureText(text, fontFamily, sizeInPixels);
+        const width = measureText(text, fontFamily, fontSize);
         res.set('Cache-Control', 'public, max-age=300, s-maxage=87400');
-        res.json({ width });
+        res.json({ text, fontFamily, fontSize, width });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
 
-app.post('/measure', (req, res) => {
-    const { text, fontFamily, sizeInPixels } = req.body;
-    
+app.post('/compute-pixels', (req, res) => {
+    const { text, fontFamily, fontSize } = req.body;
+
     try {
-        const width = measureText(text, fontFamily, sizeInPixels);
-        res.json({ width });
+        const width = measureText(text, fontFamily, fontSize);
+        res.json({ text, fontFamily, fontSize, width });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
