@@ -24,9 +24,9 @@ app.get('/compute-pixels', (req, res) => {
     const { text, fontFamily, fontSize } = req.query;
 
     try {
-        const width = measureText(text, fontFamily, fontSize);
+        const pixelSize = measureText(text, fontFamily, fontSize);
         res.set('Cache-Control', 'public, max-age=300, s-maxage=87400');
-        res.json({ text, fontFamily, fontSize, width });
+        res.json({ text, fontFamily, fontSize, length: text.length, pixelSize });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -37,8 +37,8 @@ app.post('/compute-pixels', (req, res) => {
         if (Array.isArray(req.body)) {
             // Traitement des requêtes multiples
             const results = req.body.map(({ text, fontFamily, fontSize }) => {
-                const width = measureText(text, fontFamily, fontSize);
-                return { text, fontFamily, fontSize, width };
+                const pixelSize = measureText(text, fontFamily, fontSize);
+                return { text, fontFamily, fontSize, length: text.length, pixelSize };
             });
             res.json(results);
         } else {
