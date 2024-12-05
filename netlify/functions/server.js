@@ -5,7 +5,7 @@ const app = express();
 
 // Gérer la route racine de la fonction serverless
 app.get('/.netlify/functions/server', (req, res) => {
-  res.status(200).json({ message: 'Hello world' });
+  res.status(200).json({ message: 'Hello world from /.netlify/functions/server' });
 });
 
 // Gérer la route racine du site
